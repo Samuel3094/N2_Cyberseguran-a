@@ -1,7 +1,8 @@
 # Assinatura Digital de Relatórios de Despesas
 
 Trabalho N2 – Segurança da Informação (Prof. Claudinei Dias). Sistema para **submeter, validar, assinar digitalmente e verificar** relatórios de despesas, garantindo **autenticidade, integridade e não repúdio**.
-n> **Como usar o sistema:** veja o [Manual do Usuário](MANUAL.md). Site publicado: https://samuel3094.github.io/N2_Cyberseguran-a/
+
+> **Como usar o sistema:** veja o [Manual do Usuário](MANUAL.md). Site publicado: https://samuel3094.github.io/N2_Cyberseguran-a/
 
 | Camada | Tecnologia |
 |---|---|
