@@ -1,0 +1,55 @@
+# Blueprint do Render (plano gratuito): cria a API com HTTPS automático.
+# No Render: New > Blueprint > selecione este repositório.
+# Variáveis com "sync: false" são pedidas no painel durante a criação (nunca ficam no Git).
+services:
+  - type: web
+    name: assinatura-digital-api
+    runtime: node
+    plan: free
+    region: virginia # mesma região AWS do cluster Atlas (us-east-1) = menor latência
+    rootDir: backend
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: '20'
+      # Segredos gerados aleatoriamente pelo Render (256 bits). NÃO altere SERVER_KEY_SECRET depois
+      # do primeiro deploy: ele protege a chave do carimbo de tempo guardada no banco.
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CSRF_SECRET
+        generateValue: true
+      - key: SERVER_KEY_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1h
+      # Preenchidos no painel:
+      - key: MONGODB_URI # mongodb+srv://.../assinaturas?retryWrites=true&w=majority
+        sync: false
+      - key: CORS_ORIGINS # https://SEU_USUARIO.github.io
+        sync: false
+      - key: FRONTEND_URL # https://SEU_USUARIO.github.io/NOME_DO_REPO
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_NAME
+        value: Gerente Administrador
+      # E-mail via Brevo (porta 2525: alternativa às portas SMTP padrão)
+      - key: SMTP_HOST
+        value: smtp-relay.brevo.com
+      - key: SMTP_PORT
+        value: '2525'
+      - key: SMTP_SECURE
+        value: 'false'
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM # ex.: "Assinatura Digital <seu-email-verificado@gmail.com>"
+        sync: false
