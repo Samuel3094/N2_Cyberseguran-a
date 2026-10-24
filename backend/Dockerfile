@@ -1,10 +1,10 @@
 # ---- Imagem mínima, sem ferramentas de build, executando como usuário não-root ----
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
 
-FROM node:20-alpine
+FROM node:24-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 RUN apk add --no-cache tini

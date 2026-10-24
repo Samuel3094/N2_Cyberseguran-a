@@ -5,9 +5,9 @@
 | Frontend | **GitHub Pages** | HTTPS com certificado TLS do GitHub |
 | API | **Render** (plano Free) | HTTPS automático, deploy a cada push |
 | Banco | **MongoDB Atlas** (M0) | 512 MB, backups e criptografia em repouso gerenciados |
-| E-mail | **Brevo** | 300 e-mails/dia via SMTP (Nodemailer) |
+| E-mail | **Mailtrap** (opcional) | Caixa de entrada de testes via SMTP (Nodemailer) |
 
-Ordem: **1 Atlas → 2 GitHub → 3 Brevo → 4 Render → 5 GitHub Pages**. Tempo estimado: 30 minutos.
+Ordem: **1 Atlas → 2 GitHub → 3 E-mail (opcional) → 4 Render → 5 GitHub Pages**. Tempo estimado: 30 minutos.
 Substitua `SEU_USUARIO` pelo seu usuário do GitHub e `NOME_DO_REPO` pelo nome do repositório.
 
 ---
@@ -32,12 +32,14 @@ Substitua `SEU_USUARIO` pelo seu usuário do GitHub e `NOME_DO_REPO` pelo nome d
    ```
    O `.gitignore` impede o envio de `.env` e `node_modules`. **Nunca** coloque segredos no repositório.
 
-## 3. Brevo (e-mail)
-1. Crie a conta em https://www.brevo.com (plano Free).
-2. **Senders, Domains & Dedicated IPs → Senders** → adicione e confirme o e-mail remetente (pode ser seu Gmail).
-3. **SMTP & API → SMTP** → gere uma **SMTP key**. Anote o **Login** (algo como `xxxx@smtp-brevo.com`) e a chave.
+## 3. E-mail (opcional)
+O plano Free do Render bloqueia as portas SMTP padrão (25, 465 e 587), por isso Gmail/Outlook não funcionam ali. Duas opções, ambas usando o Nodemailer:
 
-> Opcional: sem Brevo, deixe `SMTP_HOST` vazio no Render e os e-mails aparecem só nos logs.
+- **Sem serviço de e-mail:** deixe `SMTP_HOST` vazio no Render. Cada e-mail aparece nos **Logs** do Render (`[mail:dev] para=... assunto=...`).
+- **Mailtrap (recomendado para a apresentação):** os e-mails chegam a uma caixa de entrada de testes, sem verificar domínio nem remetente.
+  1. Crie a conta em https://mailtrap.io (plano Free).
+  2. **Email Testing → Inboxes → My Inbox → Integration: SMTP**.
+  3. Anote **Host** (`sandbox.smtp.mailtrap.io`), **Username** e **Password**. Use a porta **2525**.
 
 ## 4. Render (API)
 1. Crie a conta em https://render.com com o login do GitHub.
@@ -49,8 +51,9 @@ Substitua `SEU_USUARIO` pelo seu usuário do GitHub e `NOME_DO_REPO` pelo nome d
    | `CORS_ORIGINS` | `https://SEU_USUARIO.github.io` (sem barra e sem o nome do repo) |
    | `FRONTEND_URL` | `https://SEU_USUARIO.github.io/NOME_DO_REPO` |
    | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Login do gerente inicial (senha forte) |
-   | `SMTP_USER` / `SMTP_PASS` | Login e SMTP key do Brevo |
-   | `MAIL_FROM` | `Assinatura Digital <email-verificado-no-brevo@...>` |
+   | `SMTP_HOST` | `sandbox.smtp.mailtrap.io` (ou vazio para só registrar nos logs) |
+   | `SMTP_USER` / `SMTP_PASS` | Username e Password do Mailtrap (ou vazios) |
+   | `MAIL_FROM` | `Assinatura Digital <no-reply@empresa.com>` (ou vazio) |
 
    `JWT_SECRET`, `CSRF_SECRET` e `SERVER_KEY_SECRET` são gerados automaticamente (256 bits aleatórios).
 3. **Apply**. Após o build, teste: `https://assinatura-digital-api.onrender.com/api/health` → `{"status":"ok"}`.

@@ -117,7 +117,7 @@ cd backend && npm test      # 35 verificações: fluxo completo + ataques (NoSQL
 ```
 
 ## 6. Publicação com HTTPS
-> Passo a passo completo e gratuito (Atlas + Render + GitHub Pages + Brevo): **[DEPLOY.md](DEPLOY.md)**.
+> Passo a passo completo e gratuito (Atlas + Render + GitHub Pages + Mailtrap): **[DEPLOY.md](DEPLOY.md)**.
 
 - **Banco**: crie um cluster gratuito no **MongoDB Atlas** (risco de infraestrutura transferido a terceiros) e use a URI em `MONGODB_URI`. Restrinja o acesso por IP.
 - **API**: publique `backend/` em um serviço com TLS (Render, Railway, Fly.io). Defina as variáveis do `.env` e `CORS_ORIGINS=https://SEU_USUARIO.github.io`.

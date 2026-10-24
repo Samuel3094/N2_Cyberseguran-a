@@ -1,5 +1,5 @@
 # ---- Build do site estático ----
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 WORKDIR /app
 ARG NEXT_PUBLIC_API_URL=http://localhost:4000
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL NEXT_TELEMETRY_DISABLED=1
